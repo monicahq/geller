@@ -1,15 +1,17 @@
 {
     "$schema": "https://getcomposer.org/schema.json",
-    "name": "laravel/blank-livewire-starter-kit",
+    "name": "monicahq/geller",
     "type": "project",
-    "description": "The official Laravel starter kit for Livewire.",
+    "description": "The mobile app for Monica.",
     "keywords": [
         "laravel",
-        "framework"
+        "crm",
+        "prm",
+        "social"
     ],
     "license": "MIT",
     "require": {
-        "php": "^8.2",
+        "php": "^8.4",
         "laravel/framework": "^12.0",
         "laravel/tinker": "^2.10.1",
         "livewire/volt": "^1.7.0"
@@ -42,8 +44,8 @@
             "@php -r \"file_exists('.env') || copy('.env.example', '.env');\"",
             "@php artisan key:generate",
             "@php artisan migrate --force",
-            "npm install",
-            "npm run build"
+            "bun install",
+            "bun run build"
         ],
         "dev": [
             "Composer\\Config::disableProcessTimeout",
@@ -52,7 +54,7 @@
         "dev:ssr": [
             "npm run build:ssr",
             "Composer\\Config::disableProcessTimeout",
-            "npx concurrently -c \"#93c5fd,#c4b5fd,#fb7185,#fdba74\" \"php artisan serve\" \"php artisan queue:listen --tries=1\" \"php artisan pail --timeout=0\" \"php artisan inertia:start-ssr\" --names=server,queue,logs,ssr --kill-others"
+            "bunx concurrently -c \"#93c5fd,#c4b5fd,#fb7185,#fdba74\" \"php artisan serve\" \"php artisan queue:listen --tries=1\" \"php artisan pail --timeout=0\" \"php artisan inertia:start-ssr\" --names=server,queue,logs,ssr --kill-others"
         ],
         "test": [
             "@php artisan config:clear --ansi",
