@@ -12,8 +12,10 @@
     "license": "MIT",
     "require": {
         "php": "^8.4",
+        "codeat3/blade-phosphor-icons": "^2.3",
         "laravel/framework": "^12.0",
         "laravel/tinker": "^2.10.1",
+        "livewire/flux": "^2.6",
         "livewire/volt": "^1.7.0"
     },
     "require-dev": {
@@ -94,5 +96,11 @@
         }
     },
     "minimum-stability": "stable",
-    "prefer-stable": true
+    "prefer-stable": true,
+    "repositories": [
+      {
+        "type": "composer",
+        "url": "https://nativephp.composer.sh"
+      }
+    ]
 }
