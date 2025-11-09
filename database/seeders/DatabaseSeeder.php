@@ -13,7 +13,7 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         Instance::factory()->create([
-            'url' => config('app.url'),
+            'url' => config('app.app_instance_url'),
         ]);
     }
 }

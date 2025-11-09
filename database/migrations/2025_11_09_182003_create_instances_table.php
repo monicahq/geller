@@ -14,6 +14,9 @@ return new class extends Migration
         Schema::create('instances', function (Blueprint $table) {
             $table->id();
             $table->string('url');
+            $table->string('access_token')->nullable();
+            $table->string('token_type')->nullable();
+            $table->integer('expires_in')->nullable();
             $table->timestamps();
         });
     }
