@@ -44,7 +44,8 @@ new #[Layout('components.layouts.guest')] class extends Component
         , '='), '+/', '-_');
 
         $query = http_build_query([
-            'redirect_uri' => config('app.url') .'/auth/callback',
+            //'redirect_uri' => config('app.url') .'/auth/callback',
+            'redirect_uri' => 'monica://auth/callback',
             'state' => $state,
             'code_challenge' => $codeChallenge,
         ]);
