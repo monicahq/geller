@@ -54,6 +54,18 @@ return [
 
     'url' => env('APP_URL', 'http://localhost'),
 
+
+    /*
+    |--------------------------------------------------------------------------
+    | Instance URL
+    |--------------------------------------------------------------------------
+    |
+    | This URL is used to connect to the instance when logging in.
+    |
+    */
+
+    'app_instance_url' => env('APP_INSTANCE_URL', 'http://localhost'),
+
     /*
     |--------------------------------------------------------------------------
     | Application Timezone
