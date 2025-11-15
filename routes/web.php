@@ -12,11 +12,11 @@ Route::middleware('guest')->group(function (): void {
 });
 
 Route::middleware('token')->group(function (): void {
-    Route::get('/', function () {
+    Route::get('/dashboard', function () {
         return 'logged';
-    });
+    })->name('dashboard');
 });
 
 Route::get('/', function () {
     return redirect('login');
-})->name('home');
+});

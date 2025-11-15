@@ -11,6 +11,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 use InvalidArgumentException;
 use RuntimeException;
+use Native\Mobile\Facades\SecureStorage;
 
 final class TokenController extends Controller
 {
@@ -71,8 +72,10 @@ final class TokenController extends Controller
 
         if ($updates !== []) {
             $instance->forceFill($updates)->save();
+            SecureStorage::set('api_token', $payload['access_token']);
         }
 
-        return new JsonResponse($payload, $response->status());
+        //return new JsonResponse($payload, $response->status());
+        return redirect()->route('dashboard');
     }
 }

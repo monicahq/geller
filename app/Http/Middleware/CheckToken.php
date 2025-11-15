@@ -10,6 +10,7 @@ use Closure;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Native\Mobile\Facades\SecureStorage;
 
 class CheckToken
 {
@@ -20,7 +21,7 @@ class CheckToken
      */
     public function handle(Request $request, Closure $next): Response
     {
-        $token = Instance::query()->first()->access_token;
+        $token = SecureStorage::get('api_token');
 
         if (empty($token)) {
             return redirect('login');
