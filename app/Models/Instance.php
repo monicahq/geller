@@ -4,8 +4,10 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Str;
 
 final class Instance extends Model
 {
@@ -19,17 +21,13 @@ final class Instance extends Model
      */
     protected $fillable = [
         'url',
-        'access_token',
-        'token_type',
-        'expires_in',
     ];
 
-    /**
-     * The attributes that should be cast.
-     *
-     * @var array<string, string>
-     */
-    protected $casts = [
-        'expires_in' => 'integer',
-    ];
+    public function url(): Attribute
+    {
+        return Attribute::make(
+            get: fn (string $value) => Str::finish($value, '/'),
+            set: fn (string $value) => $value,
+        );
+    }
 }

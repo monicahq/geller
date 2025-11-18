@@ -1,20 +1,19 @@
 <?php
 
-use Illuminate\Http\Request;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Session;
 use Livewire\Attributes\Layout;
 use Livewire\Volt\Component;
 use App\Models\Instance;
 
 new #[Layout('components.layouts.guest')] class extends Component
 {
-
     public string $url = '';
     public bool $editing = false;
 
     public function mount()
     {
-        $this->url = Instance::query()->value('url') ?? '';
+        $this->url = config('app.app_instance_url');
     }
 
     public function startEditing(): void
@@ -25,32 +24,47 @@ new #[Layout('components.layouts.guest')] class extends Component
     /**
      * Handle an incoming authentication request.
      */
-    public function login(Request $request)
+    public function login()
     {
-        // save the new instance url
-        // get the first instance and update the url
-        Instance::query()->first()->update([
-            'url' => $this->url,
+        $validated = $this->validate([
+            'url' => ['required', 'url:https'],
         ]);
 
-        $request->session()->put('state', $state = Str::random(40));
+        // save the new instance url
+        // get the first instance and update the url
+        $instance = Instance::first();
 
-        $request->session()->put(
-            'code_verifier', $codeVerifier = Str::random(128)
-        );
+        if ($instance === null) {
+            $instance = Instance::create([
+                'url' => $validated['url'],
+            ]);
+        } else {
+            $instance->url = $validated['url'];
+            $instance->save();
+        }
+
+        $uri = $this->getAuthorizeUri();
+
+        return $this->redirect($instance->url . $uri);
+    }
+
+    private function getAuthorizeUri(): string
+    {
+        Session::put('state', $state = Str::random(40));
+
+        Session::put('code_verifier', $codeVerifier = Str::random(128));
 
         $codeChallenge = strtr(rtrim(
             base64_encode(hash('sha256', $codeVerifier, true))
         , '='), '+/', '-_');
 
         $query = http_build_query([
-            //'redirect_uri' => config('app.url') .'/auth/callback',
-            'redirect_uri' => 'monica://auth/callback',
+            'redirect_uri' => config('nativephp.deeplink_scheme') . '://bla/auth/callback',
             'state' => $state,
             'code_challenge' => $codeChallenge,
         ]);
 
-        return redirect($this->url .'/auth/authorize?'.$query);
+        return 'auth/authorize?' . $query;
     }
 }; ?>
 
