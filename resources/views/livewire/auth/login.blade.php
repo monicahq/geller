@@ -59,7 +59,7 @@ new #[Layout('components.layouts.guest')] class extends Component
         , '='), '+/', '-_');
 
         $query = http_build_query([
-            'redirect_uri' => config('nativephp.deeplink_scheme') . '://bla/auth/callback',
+            'redirect_uri' => config('nativephp.deeplink_scheme') . '://auth/callback',
             'state' => $state,
             'code_challenge' => $codeChallenge,
         ]);
