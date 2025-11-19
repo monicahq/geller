@@ -11,7 +11,6 @@ use Illuminate\Support\Facades\Log;
 use Symfony\Component\HttpFoundation\Response;
 use Native\Mobile\Facades\SecureStorage;
 
-
 class CheckToken
 {
     /**
@@ -32,8 +31,6 @@ class CheckToken
             Log::warning(('API token has expired.'));
             return redirect()->route('login');
         }
-
-        Log::info(('token present:'. $token));
 
         $request->attributes->add(['token' => $token]);
 
