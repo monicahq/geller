@@ -64,7 +64,7 @@ return [
     |
     */
 
-    'app_instance_url' => env('APP_INSTANCE_URL', 'http://localhost'),
+    'app_instance_url' => env('APP_INSTANCE_URL', 'https://app.monicahq.com'),
 
     /*
     |--------------------------------------------------------------------------

@@ -4,11 +4,10 @@ declare(strict_types=1);
 
 namespace App\Http\Middleware;
 
-use App\Models\Gift;
-use App\Models\Instance;
 use Closure;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Log;
 use Symfony\Component\HttpFoundation\Response;
 use Native\Mobile\Facades\SecureStorage;
 
@@ -24,7 +23,13 @@ class CheckToken
         $token = SecureStorage::get('api_token');
 
         if (empty($token)) {
-            return redirect('login');
+            return redirect()->route('login');
+        }
+
+        $expiresAt = SecureStorage::get('expires_at');
+        if (! empty($expiresAt) && now() > Carbon::createFromTimestamp($expiresAt)) {
+            Log::warning(('API token has expired.'));
+            return redirect()->route('login');
         }
 
         $request->attributes->add(['token' => $token]);
