@@ -26,7 +26,3 @@ Route::middleware('token')->group(function (): void {
         return "User: {$user->name}";
     })->name('home');
 });
-
-Route::get('test', function () {
-    return 'test';
-});
