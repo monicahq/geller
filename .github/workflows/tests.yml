@@ -18,23 +18,62 @@ permissions:
   checks: write
   id-token: write
 
+env:
+  COMPOSER_AUTH_JSON: |
+    {
+      "http-basic": {
+        "nativephp.composer.sh": {
+          "username": "${{ secrets.NATIVEPHP_USERNAME }}",
+          "password": "${{ secrets.NATIVEPHP_PASSWORD }}"
+        }
+      }
+    }
+
 jobs:
   tests:
+    runs-on: ubuntu-latest
     name: Run tests
-    uses: monicahq/workflows/.github/workflows/laravel.yml@v4
-    with:
-      php-versions: "['8.4']"
-      connections: "['sqlite']"
-      default-php-version: '8.4'
-      default-connection: sqlite
-      project: monicahq_geller
-    secrets:
-      SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
-  assets:
-    name: Build assets
-    uses: monicahq/workflows/.github/workflows/build_assets.yml@v4
-    with:
-      node-version: 22
-      php-install: true
-      php-version: '8.4'
+    steps:
+      - name: Checkout sources
+        uses: actions/checkout@v5
+
+      - name: Install php dependencies
+        uses: monicahq/workflows/.github/actions/php@v4
+        with:
+          php-version: 8.4
+
+      - name: Build javascript assets
+        uses: monicahq/workflows/.github/actions/js@v4
+        with:
+          node-version: 22
+
+    # Prepare
+      - name: Prepare environment
+        run: cp tests/.env.ci.sqlite .env
+
+      - name: Generate key
+        run: php artisan key:generate
+
+      - name: Setup nativephp
+        run: |
+          {
+            echo "NATIVEPHP_APP_ID=com.monicahq.geller"
+            echo "NATIVEPHP_DEVELOPMENT_TEAM=${{ secrets.NATIVEPHP_DEVELOPMENT_TEAM }}"
+            echo "APP_INSTANCE_URL=https://rachel.monicahq.com"
+          } >> .env
+
+      - name: Cache nativephp files
+        uses: actions/cache@v4
+        with:
+          path: nativephp/android/
+          key: ${{ runner.os }}-nativephp-${{ hashFiles('**/composer.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-nativephp-${{ hashFiles('**/composer.lock') }}
+            ${{ runner.os }}-nativephp-
+
+      - name: Install nativephp
+        run: php artisan native:install --force
+
+      - name: Build version
+        run: php artisan native:run android --build=debug --no-tty
