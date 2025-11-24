@@ -1,7 +1,6 @@
 <?php
 
 use App\Http\Controllers\Auth\TokenController;
-use App\Models\Instance;
 use App\Models\User;
 use App\Services\GetUser;
 use Illuminate\Support\Facades\Route;
@@ -15,14 +14,7 @@ Route::middleware('guest')->group(function (): void {
 });
 
 Route::middleware('token')->group(function (): void {
-    Route::get('/', function () {
-
-        $user = User::first();
-
-        if ($user === null) {
-            $user = (new GetUser())->store();
-        }
-
-        return "User: {$user->name}";
-    })->name('home');
+    Volt::route('/', 'home')->name('home');
+    Volt::route('vault/{vault}', 'vaults.show')->name('vault.show');
+    Volt::route('vault/{vault}/contact/{contact}', 'contacts.show')->name('contact.show');
 });

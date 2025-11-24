@@ -3,27 +3,42 @@
 namespace App\Services;
 
 use App\Models\Instance;
+use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Http;
-use Native\Mobile\Facades\SecureStorage;
 
 abstract class ApiService
 {
     protected Instance $instance;
 
     public function __construct(
-        public string $method,
-        public string $uri
+        protected string $method,
+        protected string $uri
     )
     {
-        $this->instance = Instance::firstOrFail();
+        $instance = Instance::first();
+
+        if ($instance === null) {
+            $this->instance = Instance::create([
+                'url' => config('app.app_instance_url'),
+            ]);
+        } else {
+            $this->instance = $instance;
+        }
     }
 
-    public function execute(): array
+    public function call(): Collection
     {
-        $response = Http::withToken(SecureStorage::get('api_token'))
+        $response = Http::withToken(request()->attributes->get('token'));
+
+        if (App::environment('local')) {
+            $response = $response->withoutVerifying();
+        }
+
+        $response = $response
             ->{$this->method}($this->instance->url . $this->uri)
             ->throw();
 
-        return $response->json()['data'];
+        return collect($response->json()['data']);
     }
 }

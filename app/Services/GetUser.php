@@ -13,12 +13,12 @@ final class GetUser extends ApiService
 
     public function store(): User
     {
-        $response = $this->execute();
+        $data = $this->call()->toArray();
 
-        $data = collect($response)
-            ->only(['name', 'email'])
-            ->toArray();
-
+        if ($user = User::first()) {
+            return $user->update($data);
+        }
+        
         return User::create($data);
     }
 }
