@@ -34,6 +34,6 @@ class SyncContacts
             $contact->delete();
         });
 
-        return $this->vault->contacts;
+        return $this->vault->refresh()->contacts;
     }
 }
