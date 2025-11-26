@@ -111,6 +111,7 @@ return [
         '*_SECRET',
         'DB_PASSWORD',
         'DB_USERNAME',
+        'AUTH_LOCAL_TOKEN',
     ],
 
     /*

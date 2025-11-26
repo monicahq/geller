@@ -1,10 +1,11 @@
 <?php
 
+use App\Models\Instance;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Session;
 use Livewire\Attributes\Layout;
 use Livewire\Volt\Component;
-use App\Models\Instance;
+use Native\Mobile\Facades\Browser;
 
 new #[Layout('components.layouts.guest')] class extends Component
 {
@@ -45,7 +46,7 @@ new #[Layout('components.layouts.guest')] class extends Component
 
         $uri = $this->getAuthorizeUri();
 
-        return $this->redirect($instance->url . $uri);
+        Browser::auth($instance->url . $uri);
     }
 
     private function getAuthorizeUri(): string
@@ -59,7 +60,7 @@ new #[Layout('components.layouts.guest')] class extends Component
         , '='), '+/', '-_');
 
         $query = http_build_query([
-            'redirect_uri' => config('nativephp.deeplink_scheme') . '://auth/callback',
+            'redirect_uri' => 'nativephp://127.0.0.1/auth/callback',
             'state' => $state,
             'code_challenge' => $codeChallenge,
         ]);
