@@ -5,8 +5,6 @@ declare(strict_types=1);
 namespace App\Http\Middleware;
 
 use App\Models\Instance;
-use App\Models\User;
-use App\Models\Vault;
 use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
@@ -24,20 +22,21 @@ class CheckToken
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if (($token = $this->getToken()) === null) {
+        if ($this->getToken() === null) {
+            SecureStorage::delete('api_token');
+            SecureStorage::delete('expires_at');
             Instance::all()->each(fn (Instance $instance) => $instance->delete());
 
             return redirect()->route('login');
         }
 
-        return $this->next($request, $next, $token);
+        return $next($request);
     }
 
     private function getToken(): ?string
     {
         if (empty($token = SecureStorage::get('api_token'))) {
             if (App::environment('local') && !empty($localToken = config('auth.local_token'))) {
-                Log::info('Using local token for authentication.');
                 return $localToken;
             }
 
@@ -52,12 +51,5 @@ class CheckToken
         }
 
         return $token;
-    }
-
-    private function next(Request $request, Closure $next, string $token): Response
-    {
-        $request->attributes->add(['token' => $token]);
-
-        return $next($request);
     }
 }

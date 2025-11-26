@@ -3,18 +3,18 @@
 namespace App\Services;
 
 use App\Models\Vault;
+use Illuminate\Database\Eloquent\Collection;
 
 class SyncVaults
 {
-    public function __invoke()
+    public function __invoke(): Collection
     {
+        $localVaults = Vault::all();
         $vaults = (new GetVaults())->call();
 
         if ($vaults === null) {
-            return;
+            return $localVaults;
         }
-
-        $localVaults = Vault::all();
 
         foreach ($vaults as $vaultData) {
             // test if vault exist in localVaults
@@ -22,10 +22,8 @@ class SyncVaults
 
             if ($vault === null || $vault->last_synced_at < now()->subMinutes(5)) {
                 // fetch and store the vault
-                tap((new GetVault($vaultData['id']))
-                    ->store(), fn (?Vault $newVault) =>
-                    $newVault && $localVaults->push($newVault)
-                );
+                (new GetVault($vaultData['id']))
+                    ->store();
             }
         }
 
@@ -34,11 +32,10 @@ class SyncVaults
 
         $localVaults->filter(fn ($vault) =>
             !in_array($vault->id, $remoteIds)
-        )->each(function ($vault) use ($localVaults) {
-            $localVaults = $localVaults->pull($vault);
+        )->each(function ($vault)  {
             $vault->delete();
         });
 
-        return $localVaults;
+        return Vault::all();
     }
 }

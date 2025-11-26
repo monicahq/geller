@@ -4,15 +4,14 @@ use App\Models\User;
 use App\Services\GetUser;
 use App\Services\SyncVaults;
 
+use function Livewire\Volt\hydrate;
 use function Livewire\Volt\mount;
 use function Livewire\Volt\state;
 
-state(['user','vaults']);
+state(['user']);
 
-mount(function () {
+mount(function()  {
     $this->user = User::first() ?? (new GetUser())->store();
-
-    $this->vaults = (new SyncVaults)();
 });
 ?>
 
@@ -23,12 +22,6 @@ mount(function () {
 
     <h2 class="text-xl font-semibold mb-2">{{ __('Your Vaults:') }}</h2>
     <div class="list-disc list-inside mb-6">
-        @foreach ($vaults as $vault)
-            <div class="mb-4">
-                <x-link href="{{ route('vault.show', $vault) }}">
-                    {{ $vault->name }}
-                </x-link>
-            </div>
-        @endforeach
+      <livewire:vaults.lazy.index lazy />
     </div>
 </div>
