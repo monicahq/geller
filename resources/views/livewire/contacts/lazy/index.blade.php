@@ -10,7 +10,7 @@ use function Livewire\Volt\state;
 placeholder(<<<'HTML'
 <div>
   Loading...
-  <livewire:contacts.index :$vault :contacts="$vault->contacts" />
+  <livewire:contacts.partials.index :$vault :contacts="$vault->contacts" />
 </div>
 HTML
 );
@@ -18,11 +18,11 @@ HTML
 state(['vault','contacts']);
 
 mount(function (Vault $vault) {
-    $this->vault = $vault;
-    $this->contacts = (new SyncContacts($this->vault))();
+  $this->vault = $vault;
+  $this->contacts = (new SyncContacts($this->vault))();
 });
 ?>
 
 <div>
-  <livewire:contacts.index :$vault :$contacts />
+  <livewire:contacts.partials.index :$vault :$contacts />
 </div>

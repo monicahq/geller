@@ -10,7 +10,7 @@ use function Livewire\Volt\state;
 
 placeholder(<<<'HTML'
 <div>
-  <livewire:contacts.show :$vault :$contact />
+  <livewire:contacts.partials.show :$vault :$contact />
 </div>
 HTML
 );
@@ -18,20 +18,20 @@ HTML
 state(['vault','contact']);
 
 mount(function (Vault $vault, Contact $contact) {
-    $this->vault = $vault;
-    $this->contact = $contact;
+  $this->vault = $vault;
+  $this->contact = $contact;
 
-    if ($contact->last_synced_at < now()->subMinutes(5)) {
-        // fetch and store the contact
-        $updateContact = (new GetContact($this->vault, $contact->id))->store();
+  if ($contact->last_synced_at < now()->subMinutes(5)) {
+    // fetch and store the contact
+    $updateContact = (new GetContact($this->vault, $contact->id))->store();
 
-        if ($updateContact !== null) {
-           $this->contact = $updateContact;
-        }
+    if ($updateContact !== null) {
+      $this->contact = $updateContact;
     }
+  }
 });
 ?>
 
 <div>
-  <livewire:contacts.show :$vault :$contact />
+  <livewire:contacts.partials.show :$vault :$contact />
 </div>

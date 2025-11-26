@@ -9,18 +9,18 @@ use function Livewire\Volt\state;
 placeholder(<<<'HTML'
 <div>
   Loading...
-  <livewire:vaults.index :vaults="App\Models\Vault::all()" />
+  <livewire:vaults.partials.index :vaults="App\Models\Vault::all()" />
 </div>
 HTML
 );
 
-state(['vaults']);
+state(['vaults'])->locked();
 
-mount(function()  {
-    $this->vaults = (new SyncVaults)();
+mount(function() {
+  $this->vaults = (new SyncVaults)();
 });
 ?>
 
 <div>
-  <livewire:vaults.index :$vaults />
+  <livewire:vaults.partials.index :$vaults />
 </div>

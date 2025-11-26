@@ -5,7 +5,7 @@ use App\Models\Vault;
 use function Livewire\Volt\mount;
 use function Livewire\Volt\state;
 
-state(['vault']);
+state(['vault'])->locked();
 
 mount(function (Vault $vault) {
     $this->vault = $vault;
@@ -22,7 +22,9 @@ mount(function (Vault $vault) {
       </div>
     </x-link>
 
-    <h1 class="text-2xl font-bold mb-4">{{ $vault->name }}</h1>
+    <h1 class="text-2xl font-bold mb-4">
+      {{ $vault->name }}
+    </h1>
 
-    <livewire:contacts.index :$vault />
+    <livewire:contacts.lazy.index :$vault lazy />
 </div>
