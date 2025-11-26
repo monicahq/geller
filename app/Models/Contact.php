@@ -8,13 +8,20 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class Contact extends Model
 {
     /**
+     * The primary key for the model.
+     *
+     * @var string
+     */
+    protected $primaryKey = 'iid';
+
+    /**
      * The attributes that are mass assignable.
      *
      * @var list<string>
      */
     protected $fillable = [
         'name',
-        'external_id',
+        'id',
         'last_synced_at',
     ];
 

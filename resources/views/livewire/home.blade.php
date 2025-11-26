@@ -17,9 +17,11 @@ mount(function () {
 ?>
 
 <div>
-    <h1 class="text-2xl font-bold mb-4">Welcome, {{ $user->name }}!</h1>
+    <h1 class="text-2xl font-bold mb-4">
+      {{ __('Welcome, :name!', ['name' => $user->name]) }}
+    </h1>
 
-    <h2 class="text-xl font-semibold mb-2">Your Vaults:</h2>
+    <h2 class="text-xl font-semibold mb-2">{{ __('Your Vaults:') }}</h2>
     <div class="list-disc list-inside mb-6">
         @foreach ($vaults as $vault)
             <div class="mb-4">

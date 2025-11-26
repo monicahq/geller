@@ -8,6 +8,6 @@ final class GetContacts extends ApiService
 {
     public function __construct(Vault $vault)
     {
-        parent::__construct('get', "api/vaults/{$vault->external_id}/contacts");
+        parent::__construct('get', "api/vaults/{$vault->id}/contacts");
     }
 }

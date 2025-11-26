@@ -13,10 +13,20 @@ mount(function (Vault $vault) {
     $this->vault = $vault;
     if ($vault->last_synced_at < now()->subMinutes(5)) {
         // fetch and store the vault
-        $this->vault = (new GetVault($vault->external_id))->store();
+        $updateVault = (new GetVault($vault->id))->store();
+
+        if ($updateVault === null) {
+            return redirect()->route('home');
+        }
+
+        $this->vault = $updateVault;
     }
 
-    $this->contacts = (new SyncContacts($vault))();
+    $this->contacts = (new SyncContacts($this->vault))();
+
+    if ($this->contacts === null) {
+        return redirect()->route('home');
+    }
 });
 ?>
 
@@ -32,6 +42,6 @@ mount(function (Vault $vault) {
     @endforeach
 
     <x-link href="{{ route('home') }}">
-      Back
+      {{ __('Back') }}
     </x-link>
 </div>

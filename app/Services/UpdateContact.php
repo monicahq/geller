@@ -5,16 +5,16 @@ namespace App\Services;
 use App\Models\Contact;
 use App\Models\Vault;
 
-final class GetContact extends ApiService
+final class UpdateContact extends ApiService
 {
     public function __construct(public Vault $vault, protected string $contactId)
     {
-        parent::__construct('get', "api/vaults/{$vault->id}/contacts/{$contactId}");
+        parent::__construct('put', "api/vaults/{$vault->id}/contacts/{$contactId}");
     }
 
-    public function store(): ?Contact
+    public function store(array $data): ?Contact
     {
-        $response = $this->call();
+        $response = $this->call($data);
 
         if ($response === null || !isset($response['id']) || $response['id'] !== $this->contactId) {
             return null;

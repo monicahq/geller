@@ -5,16 +5,16 @@ namespace App\Services;
 use App\Models\Instance;
 use App\Models\Vault;
 
-final class GetVault extends ApiService
+final class UpdateVault extends ApiService
 {
     public function __construct(protected string $vaultId)
     {
-        parent::__construct('get', "api/vaults/{$vaultId}");
+        parent::__construct('put', "api/vaults/{$vaultId}");
     }
 
-    public function store(): ?Vault
+    public function store(array $data): ?Vault
     {
-        $response = $this->call();
+        $response = $this->call($data);
 
         if ($response === null || !isset($response['id']) || $response['id'] !== $this->vaultId) {
             return null;

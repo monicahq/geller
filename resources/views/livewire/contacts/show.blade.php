@@ -15,7 +15,13 @@ mount(function (Vault $vault, Contact $contact) {
 
     if ($contact->last_synced_at < now()->subMinutes(5)) {
         // fetch and store the contact
-        $this->contact = (new GetContact($this->vault, $contact->external_id))->store();
+        $updateContact = (new GetContact($this->vault, $contact->id))->store();
+
+        if ($updateContact === null) {
+            return redirect()->route('vault.show', $vault);
+        }
+
+        $this->contact = $updateContact;
     }
 });
 ?>
@@ -24,6 +30,6 @@ mount(function (Vault $vault, Contact $contact) {
     <h1 class="text-2xl font-bold mb-4">{{ $contact->name }}</h1>
 
     <x-link href="{{ route('vault.show', $vault) }}">
-      Back
+      {{ __('Back') }}
     </x-link>
 </div>

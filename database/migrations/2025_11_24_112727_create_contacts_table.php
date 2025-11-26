@@ -13,14 +13,14 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('contacts', function (Blueprint $table) {
-            $table->id();
-            $table->uuid('external_id');
+            $table->id('iid');
+            $table->uuid('id');
             $table->string('name');
             $table->timestamp('last_synced_at')->nullable();
             $table->foreignIdFor(Vault::class)->constrained()->cascadeOnDelete();
             $table->timestamps();
 
-            $table->index('external_id');
+            $table->index(['vault_iid', 'id']);
         });
     }
 

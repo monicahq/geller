@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Middleware;
 
+use App\Models\Instance;
 use App\Models\User;
 use App\Models\Vault;
 use Closure;
@@ -24,8 +25,7 @@ class CheckToken
     public function handle(Request $request, Closure $next): Response
     {
         if (($token = $this->getToken()) === null) {
-            User::all()->each(fn (User $user) => $user->delete());
-            Vault::all()->each(fn (Vault $vault) => $vault->delete());
+            Instance::all()->each(fn (Instance $instance) => $instance->delete());
 
             return redirect()->route('login');
         }
