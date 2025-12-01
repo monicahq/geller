@@ -3,7 +3,7 @@
 @props([
   'external' => false,
   'navigate' => true,
-  'noUnderline' => false,
+  'noUnderline' => true,
 ])
 
 <a @if ($external) target="_blank" @endif @if ($navigate) wire:navigate @endif

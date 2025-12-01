@@ -17,7 +17,7 @@ mount(function (Vault $vault, Collection $contacts) {
 <div>
   @foreach ($contacts as $contact)
     <div class="mb-2">
-      <x-link href="{{ route('contact.show', [$vault, $contact]) }}">
+      <x-link href="{{ route('contacts.show', [$vault, $contact]) }}">
         {{ $contact->name }}
       </x-link>
     </div>

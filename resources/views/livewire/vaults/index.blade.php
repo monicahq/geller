@@ -18,7 +18,7 @@ $create = function() {
 
     $this->dispatch('vault-created');
 
-    return redirect()->route('vault.show', $vault);
+    return redirect()->route('vaults.show', $vault);
 };
 ?>
 
