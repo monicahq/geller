@@ -11,14 +11,18 @@ final class GetUser extends ApiService
         parent::__construct('get', 'api/user');
     }
 
-    public function store(): User
+    public function store(): ?User
     {
-        $response = $this->execute();
+        $data = $this->call();
 
-        $data = collect($response)
-            ->only(['name', 'email'])
-            ->toArray();
+        if ($data === null) {
+            return null;
+        }
 
-        return User::create($data);
+        if ($user = User::first()) {
+            return $user->update($data->all());
+        }
+
+        return User::create($data->all());
     }
 }
