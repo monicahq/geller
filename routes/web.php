@@ -13,6 +13,8 @@ Route::middleware('guest')->group(function (): void {
 
 Route::middleware('token')->group(function (): void {
     Volt::route('/', 'home')->name('home');
-    Volt::route('vaults/{vault}', 'vaults.show')->lazy()->name('vaults.show');
-    Volt::route('vaults/{vault}/contacts/{contact}', 'contacts.show')->lazy()->name('contacts.show');
+    Volt::route('vaults/create', 'vaults.create')->name('vaults.create');
+    Volt::route('vaults/{vault}', 'vaults.show')->name('vaults.show');
+
+    Volt::route('vaults/{vault}/contacts/{contact}', 'contacts.show')->name('contacts.show');
 });

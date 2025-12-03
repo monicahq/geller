@@ -14,6 +14,16 @@ mount(function (Vault $vault, Contact $contact) {
 });
 ?>
 
+<x-slot:vault :vault="$vault"></x-slot>
+
+<x-slot:breadcrumbs :breadcrumbs="[
+  ['title' => $vault->name, 'url' => route('vaults.show', $vault)],
+]"></x-slot>
+
+<x-slot:title>
+  {{ __('Contact Details') }} - {{ $contact->name }}
+</x-slot>
+
 <div>
   <livewire:contacts.lazy.show :$vault :$contact lazy />
 </div>

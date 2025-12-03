@@ -9,7 +9,6 @@ use function Livewire\Volt\state;
 
 placeholder(<<<'HTML'
 <div>
-  Loading...
   <livewire:contacts.partials.index :$vault :contacts="$vault->contacts" />
 </div>
 HTML
