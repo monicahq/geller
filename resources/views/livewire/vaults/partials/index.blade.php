@@ -15,7 +15,7 @@ mount(function(Collection $vaults)  {
 <div>
   @foreach ($vaults as $vault)
     <div class="mb-4">
-      <x-link href="{{ route('vault.show', $vault) }}">
+      <x-link href="{{ route('vaults.show', $vault) }}">
           {{ $vault->name }}
       </x-link>
     </div>

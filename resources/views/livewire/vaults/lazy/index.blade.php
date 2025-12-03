@@ -8,7 +8,6 @@ use function Livewire\Volt\state;
 
 placeholder(<<<'HTML'
 <div>
-  Loading...
   <livewire:vaults.partials.index :vaults="App\Models\Vault::all()" />
 </div>
 HTML
